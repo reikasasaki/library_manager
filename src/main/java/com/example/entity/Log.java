@@ -1,13 +1,14 @@
 package com.example.entity;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -22,16 +23,16 @@ public class Log {
 	private Integer id;
 	
 	@Column(name = "LIBRARY_ID")
-	private Integer library_id;
+	private Integer libraryId;
 	
 	@Column(name = "USER_ID")
-	private Integer user_id;
+	private Integer userId;
 	
 	@Column(name = "RENT_DATE")
-	private Date rent_date;
+	private LocalDateTime rentDate;
 	
 	@Column(name = "RETURN_DATE")
-	private Date return_date;
+	private LocalDateTime return_date;
 	
 	@Column(name = "RETURN_DUE_DATE")
 	private LocalDateTime return_due_date;
@@ -44,35 +45,35 @@ public class Log {
 		this.id = id;
 	}
 
-	public Integer getLibrary_id() {
-		return this.library_id;
+	public Integer getLibraryId() {
+		return this.libraryId;
 	}
 
-	public void setLibrary_id(Integer library_id) {
-		this.library_id = library_id;
+	public void setLibraryId(Integer libraryId) {
+		this.libraryId = libraryId;
 	}
 
-	public Integer getUser_id() {
-		return this.user_id;
+	public Integer getUserId() {
+		return this.userId;
 	}
 
-	public void setUser_id(Integer user_id) {
-		this.user_id = user_id;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
-	public Date getRent_date() {
-		return this.rent_date;
+	public LocalDateTime getRentDate() {
+		return this.rentDate;
 	}
 
-	public void setRent_date(Date rent_date) {
-		this.rent_date = rent_date;
+	public void setRentDate(LocalDateTime rentDate) {
+		this.rentDate = rentDate;
 	}
 
-	public Date getReturn_date() {
+	public LocalDateTime getReturn_date() {
 		return this.return_date;
 	}
 
-	public void setReturn_date(Date return_date) {
+	public void setReturn_date(LocalDateTime return_date) {
 		this.return_date = return_date;
 	}
 
@@ -84,5 +85,11 @@ public class Log {
 		this.return_due_date = return_due_date;
 	}
 	
+	@ManyToOne
+	@JoinColumn(name = "LIBRARY_ID",insertable = false,updatable = false)
+	private Library library;
 	
+	public Library getLibrary() {
+		return this.library;
+	}
 }

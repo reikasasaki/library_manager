@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,9 +61,9 @@ public class LibraryController {
 		libraries.setUser_id(userId);
 		libraryService.update(id, libraries);
 		Log log = new Log();
-		log.setLibrary_id(id);
-		log.setUser_id(userId);
-		log.setRent_date(new Date());
+		log.setLibraryId(id);
+		log.setUserId(userId);
+		log.setRentDate(LocalDateTime.now());
 		log.setReturn_due_date(LocalDateTime.parse(returnDueDate+"T00:00:00"));
 		log.setReturn_date(null);
 		this.logService.save(log);
@@ -76,7 +75,21 @@ public class LibraryController {
 		Library libraries = this.libraryService.findLibrary(id);
 		libraries.setUser_id(0);
 		libraryService.update(id, libraries);
-		
+		User user = loginUser.getUser();
+		Integer userId = user.getId();
+		Log log = this.logService.findLatestLibrary(id, userId);
+		log.setReturn_date(LocalDateTime.now());
+		this.logService.save(log);
 		return "redirect:/library";
+	}
+	
+	
+	@GetMapping("/history")
+	public String history(Model model,@AuthenticationPrincipal LoginUser loginuser) {
+		User user = loginuser.getUser();
+		Integer userId = user.getId();
+		List<Log> log = this.logService.findLog(userId);
+		model.addAttribute("log",log);
+		return "library/borrowHistory";
 	}
 }
